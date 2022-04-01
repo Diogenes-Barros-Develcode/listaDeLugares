@@ -1,5 +1,5 @@
 import React from 'react';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import {
   Text,
   StyleSheet,
@@ -13,14 +13,30 @@ import {CardPlaces} from '../components/CardPlaces';
 export function Home() {
   const [newPlace, setNewPlace] = useState('');
   const [myPlace, setMyPlace] = useState([]);
+  const [gretting, setGrettings] = useState('');
 
   function handleAddNewPlace() {
     setMyPlace(oldState => [...oldState, newPlace]);
   }
 
+  useEffect(() => {
+    const currentHour = new Date().getHours();
+
+    if (currentHour < 12) {
+      setGrettings('Good Morning');
+    } else if (currentHour >= 12 && currentHour < 18) {
+      setGrettings('Good Afternoon');
+    } else {
+      setGrettings('Good Night');
+    }
+  }, []);
+
   return (
     <SafeAreaView style={style.viewStyle}>
       <Text style={style.title}>Welcome, Diógenes</Text>
+
+      <Text style={style.greetings}>{gretting}</Text>
+
       <TextInput
         style={style.styleInput}
         placeholder="Places to travel"
@@ -61,5 +77,12 @@ const style = StyleSheet.create({
     fontSize: 20,
     padding: 15,
     borderRadius: 10,
+  },
+  greetings: {
+    color: '#FFFFFF',
+    marginBottom: 20,
+    textAlign: 'center',
+    fontSize: 20,
+    fontWeight: 'bold',
   },
 });
