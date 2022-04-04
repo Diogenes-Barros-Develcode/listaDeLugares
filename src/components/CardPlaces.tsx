@@ -1,9 +1,18 @@
 import React from 'react';
-import {TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  TouchableOpacityProps,
+} from 'react-native';
 
-export function CardPlaces({places}) {
+interface CardPlacesProps extends TouchableOpacityProps {
+  places: string;
+}
+
+export function CardPlaces({places, ...rest}: CardPlacesProps) {
   return (
-    <TouchableOpacity style={style.buttonPlaces}>
+    <TouchableOpacity style={style.buttonPlaces} {...rest}>
       <Text style={style.textPlaces}>{places}</Text>
     </TouchableOpacity>
   );

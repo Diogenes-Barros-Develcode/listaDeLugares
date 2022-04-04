@@ -10,13 +10,26 @@ import {
 import {Button} from '../components/Button';
 import {CardPlaces} from '../components/CardPlaces';
 
+interface PlacesData {
+  id: string;
+  name: string;
+}
+
 export function Home() {
   const [newPlace, setNewPlace] = useState('');
-  const [myPlace, setMyPlace] = useState([]);
+  const [myPlace, setMyPlace] = useState<PlacesData[]>([]);
   const [gretting, setGrettings] = useState('');
 
   function handleAddNewPlace() {
-    setMyPlace(oldState => [...oldState, newPlace]);
+    const data = {
+      id: String(new Date().getTime()),
+      name: newPlace,
+    };
+    setMyPlace(oldState => [...oldState, data]);
+  }
+
+  function handleRemovePlace(id: string) {
+    setMyPlace(oldState => oldState.filter(place => place.id !== id));
   }
 
   useEffect(() => {
@@ -44,14 +57,19 @@ export function Home() {
         onChangeText={setNewPlace}
       />
 
-      <Button onPress={handleAddNewPlace} />
+      <Button onPress={handleAddNewPlace} title="Add" />
 
       <Text style={style.title}>My Places</Text>
 
       <FlatList
         data={myPlace}
-        keyExtractor={item => item}
-        renderItem={({item}) => <CardPlaces places={item} />}
+        keyExtractor={item => item.id}
+        renderItem={({item}) => (
+          <CardPlaces
+            places={item.name}
+            onPress={() => handleRemovePlace(item.id)}
+          />
+        )}
       />
     </SafeAreaView>
   );
